@@ -21,6 +21,10 @@ import (
 
 func init() {
 	gob.Register(modals.User{})
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("loading env variables", err)
+	}
 }
 
 // Databaseden ürünleri getirme işlemi
@@ -69,10 +73,7 @@ func main() {
 	r.DELETE("/orderlist/deleteproduct", olc.DeleteOrderList)
 	r.GET("/orderlist/fetch/:username", olc.GetOrderList)
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("loading env variables", err)
-	}
+
 
 	 port := os.Getenv("PORT")
 	 if port == "" {
