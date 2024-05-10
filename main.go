@@ -3,13 +3,17 @@ package main
 import (
 	"context"
 	"encoding/gob"
-	// "github.com/joho/godotenv"
+	"os"
+
+	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
+
+	"log"
+	"net/http"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"net/http"
+
 	//"os"
 	"shoppinglist/controllers"
 	"shoppinglist/modals"
@@ -17,10 +21,10 @@ import (
 
 func init() {
 	gob.Register(modals.User{})
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	log.Fatal("loading env variables", err)
-	// }
+	 err := godotenv.Load(".env")
+	 if err != nil {
+	 	log.Fatal("loading env variables", err)
+	 }
 
 }
 
@@ -68,14 +72,14 @@ func main() {
 	r.DELETE("/orderlist/deleteproduct", olc.DeleteOrderList)
 	r.GET("/orderlist/fetch/:username", olc.GetOrderList)
 
-	// port := os.Getenv("PORT")
-	// if port == "" {
-	// 	port = "8080"
-	// }
-	http.ListenAndServe(":8080", corsHandler(r))
+	 port := os.Getenv("PORT")
+	 if port == "" {
+	 	port = "8080"
+	 }
+	http.ListenAndServe(":"+port, corsHandler(r))
 }
 func getClient() *mongo.Client {
-	clientOptions := options.Client().ApplyURI("mongodb+srv://emirc:Emir2211@cluster0.vwhsi9m.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")  // Bağlantı adresi
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URI"))  // Bağlantı adresi
 	client, err := mongo.Connect(context.Background(), clientOptions) // Bağlantı kurma
 	if err != nil {
 		log.Fatal(err)
