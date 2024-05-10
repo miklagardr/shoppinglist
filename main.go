@@ -21,11 +21,6 @@ import (
 
 func init() {
 	gob.Register(modals.User{})
-	 err := godotenv.Load(".env")
-	 if err != nil {
-	 	log.Fatal("loading env variables", err)
-	 }
-
 }
 
 // Databaseden ürünleri getirme işlemi
@@ -35,6 +30,8 @@ func main() {
 	pc := controllers.NewProductController(getClient())
 	uc := controllers.NewUserController(getClient())
 	olc := controllers.NewOrderListController(getClient())
+
+	
 
 	corsHandler := func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +68,11 @@ func main() {
 	r.PUT("/orderlist/addproduct", olc.AddProductOrderList) // Id'ye göre order list sil
 	r.DELETE("/orderlist/deleteproduct", olc.DeleteOrderList)
 	r.GET("/orderlist/fetch/:username", olc.GetOrderList)
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("loading env variables", err)
+	}
 
 	 port := os.Getenv("PORT")
 	 if port == "" {
