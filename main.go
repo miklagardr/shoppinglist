@@ -35,8 +35,6 @@ func main() {
 	uc := controllers.NewUserController(getClient())
 	olc := controllers.NewOrderListController(getClient())
 
-	
-
 	corsHandler := func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
