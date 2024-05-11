@@ -25,6 +25,9 @@ func init() {
 	store.Options = &sessions.Options{
 		Path:     "/",                     // Cookie'nin tüm URL'ler altında erişilebilir olmasını sağlar
 		MaxAge:   30 * 24 * 60 * 60,       // 30 gün
+		HttpOnly: true,                    // Cookie'ye sadece HTTP istekleri üzerinden erişilebilir
+		SameSite: http.SameSiteNoneMode, // Cookie'nin sadece aynı site üzerinden erişilebilir olmasını sağlar
+		Secure:   true,                    // Cookie'nin HTTPS üzerinden gönderilmesini sağlar
 	}
 }
 
