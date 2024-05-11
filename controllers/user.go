@@ -2,16 +2,34 @@ package controllers
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
+	"log"
 
 	"net/http"
+
+	"shoppinglist/modals"
 
 	"github.com/gorilla/sessions"
 	"github.com/julienschmidt/httprouter"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"shoppinglist/modals"
 )
+
+var store *sessions.CookieStore
+
+func init() {
+
+	store = sessions.NewCookieStore(generateSessionKey())
+
+	store.Options = &sessions.Options{
+		Path:     "/",                     // Cookie'nin tüm URL'ler altında erişilebilir olmasını sağlar
+		MaxAge:   30 * 24 * 60 * 60,       // 30 gün
+		HttpOnly: true,                    // Cookie'ye sadece HTTP istekleri üzerinden erişilebilir
+		Secure:   true,                    // Cookie'nin yalnızca HTTPS üzerinden iletilmesini sağlar
+		SameSite: http.SameSiteStrictMode, // SameSite ayarı
+	}
+}
 
 type UserController struct {
 	client *mongo.Client
@@ -21,12 +39,14 @@ func NewUserController(c *mongo.Client) *UserController {
 	return &UserController{c}
 }
 
-func sessionKey() []byte {
-	var sessionKey = []byte("fe2db5a0c64a0e3f62c18f937e5af6e0")
-	return sessionKey
+func generateSessionKey() []byte {
+	key := make([]byte, 32) // 32 byte'lık rastgele bir anahtar oluşturun
+	_, err := rand.Read(key)
+	if err != nil {
+		log.Fatal("Error generating session key: ", err)
+	}
+	return key
 }
-
-var store = sessions.NewCookieStore(sessionKey())
 
 func (uc UserController) GetUser(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	session, err := store.Get(req, "user-session")
