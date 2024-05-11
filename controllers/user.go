@@ -27,7 +27,7 @@ func init() {
 		MaxAge:   30 * 24 * 60 * 60,       // 30 gün
 		HttpOnly: true,                    // Cookie'ye sadece HTTP istekleri üzerinden erişilebilir
 		Secure:   true,                    // Cookie'nin yalnızca HTTPS üzerinden iletilmesini sağlar
-		SameSite: http.SameSiteStrictMode, // SameSite ayarı
+		SameSite: http.SameSiteNoneMode, // SameSite ayarı
 	}
 }
 
