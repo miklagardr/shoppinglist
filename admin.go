@@ -133,3 +133,34 @@ func (a Admin) deleteUserAdmin(w http.ResponseWriter, req *http.Request, _ httpr
 	}
 
 }
+
+func (a Admin) GetOrdersAdmin(w http.ResponseWriter , req *http.Request , _ httprouter.Params){
+	if req.Method == http.MethodGet{
+
+		collection := a.client.Database("shoppinglist").Collection("orders")
+		cursor, err := collection.Find(context.Background(), bson.D{}) // Bütün productları getir
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer cursor.Close(context.Background())
+
+		var orders []modals.Order
+		err = cursor.All(context.Background() , &orders)
+		if err != nil{
+			http.Error(w,err.Error(),http.StatusInternalServerError)
+			return
+		}
+		jsonResp, err := json.Marshal(orders) 
+		if err != nil {
+			http.Error(w,err.Error(),http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(jsonResp)
+
+
+	}else{
+		http.Error(w,"Method Not Allowed" , http.StatusForbidden)
+	}
+} 

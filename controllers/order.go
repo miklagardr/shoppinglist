@@ -68,11 +68,12 @@ func (o OrderController) CreateOrder(w http.ResponseWriter , req *http.Request ,
 
 }
 
-func (o OrderController) GetOrders(w http.ResponseWriter , req *http.Request , _ httprouter.Params){
+func (o OrderController) GetOrdersByUsername(w http.ResponseWriter , req *http.Request , p httprouter.Params){
 	if req.Method == http.MethodGet{
-
+		username := p.ByName("username") 
+		filter := bson.M{"orderlist.username" : username} 
 		collection := o.client.Database("shoppinglist").Collection("orders")
-		cursor, err := collection.Find(context.Background(), bson.D{}) // Bütün productları getir
+		cursor, err := collection.Find(context.Background(), filter) // Bütün productları getir
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

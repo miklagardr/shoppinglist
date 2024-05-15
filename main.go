@@ -70,10 +70,11 @@ func main() {
 	r.GET("/orderlist/fetch/:username", olc.GetOrderList)
 
 	r.POST("/order/createOrder", o.CreateOrder)
-	r.GET("/order/getOrders", o.GetOrders) 
+	r.GET("/order/getOrders/:username", o.GetOrdersByUsername) 
 
 	r.GET("/admin/getAllUser/:username" , admin.getAllUserInformation)
 	r.DELETE("/admin/deleteUserByAdmin" , admin.deleteUserAdmin)  
+	r.GET("/admin/getOrders" , admin.GetOrdersAdmin) 
 
 	 port := os.Getenv("PORT")
 	 if port == "" {
