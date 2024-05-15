@@ -24,7 +24,7 @@ func init() {
 
 	store.Options = &sessions.Options{
 		Path:     "/",                   
-		MaxAge:   600,                 
+		MaxAge:   31536000,                 
 		SameSite: http.SameSiteNoneMode, 
 		Secure:   true,                    
 	}

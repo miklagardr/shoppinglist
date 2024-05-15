@@ -30,16 +30,19 @@ func (olc OrderListController) CreateOrderList(w http.ResponseWriter, req *http.
 		_, err = collection.InsertOne(context.Background(), orderList)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		jsonOrderList, err := json.Marshal(orderList)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(jsonOrderList)
 
 	} else {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
 	}
 }
 func (olc OrderListController) AddProductOrderList(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
@@ -110,6 +113,7 @@ func (olc OrderListController) AddProductOrderList(w http.ResponseWriter, req *h
 
 	} else {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
 	}
 }
 
@@ -182,6 +186,7 @@ func (olc OrderListController) DeleteOrderList(w http.ResponseWriter, req *http.
 		w.Write(jsonResp)
 	} else {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
 	}
 }
 
@@ -205,5 +210,6 @@ func (olc OrderListController) GetOrderList(w http.ResponseWriter, req *http.Req
 
 	} else {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
 	}
 }

@@ -12,3 +12,4 @@ type EditUser struct {
 	Password   string `json:"password" bson:"password"`
 	NewPassword   string `json:"newpassword" bson:"newpassword"`
 }
+
