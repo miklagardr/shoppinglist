@@ -36,9 +36,7 @@ func (o OrderController) CreateOrder(w http.ResponseWriter , req *http.Request ,
 		var order modals.Order 
 		order.OrderList = orderlist 
 		order.OrderId = generateOrderID()
-		loc, _ := time.LoadLocation("Africa/Cairo")
-		now := time.Now().In(loc)
-		order.Date = now
+		order.Date = time.Now()
 
 		collection := o.client.Database("shoppinglist").Collection("orders"); 
 		_ , err = collection.InsertOne(context.Background() , order)
