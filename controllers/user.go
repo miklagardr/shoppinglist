@@ -18,7 +18,7 @@ import (
 
 var store *sessions.CookieStore
 
-func CreateCookieandSession() {
+func init() {
 
 	store = sessions.NewCookieStore(generateSessionKey())
 	store.Options = &sessions.Options{
@@ -106,7 +106,7 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 			}
 			http.Error(w, "Failed to get session, existing session cleared", http.StatusInternalServerError)
 		}
-		
+
 		if authenticated, ok := session.Values["authenticated"].(bool); ok && authenticated {
 			jsonResponse := modals.User{
 				Username:   existingUser.Username,
@@ -118,8 +118,6 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 			jsonUser, _ := json.Marshal(jsonResponse)
 			w.Write(jsonUser) // Kullanıcı bilgilerini bastır.
 			return
-		} else {
-			CreateCookieandSession()
 		}
 
 		session.Values["user"] = modals.User{
