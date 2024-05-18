@@ -9,6 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Admin struct {
@@ -18,6 +19,8 @@ type Admin struct {
 func NewAdminController(c *mongo.Client) *Admin {
 	return &Admin{c}
 }
+
+
 
 func (a Admin) allUserInfo() ([]modals.User, error) {
 
@@ -164,3 +167,29 @@ func (a Admin) GetOrdersAdmin(w http.ResponseWriter , req *http.Request , _ http
 		http.Error(w,"Method Not Allowed" , http.StatusForbidden)
 	}
 } 
+
+func (a Admin) AddNewProduct(w http.ResponseWriter , req *http.Request , _ httprouter.Params){
+	if req.Method == http.MethodPost{
+		var product modals.Products
+		
+
+		err := json.NewDecoder(req.Body).Decode(&product)
+		if err != nil {
+			http.Error(w,err.Error(),http.StatusInternalServerError)
+			return
+		}
+		id := primitive.NewObjectID()
+		product.ID = id
+
+		collection := a.client.Database("shoppinglist").Collection("products")
+		_,err = collection.InsertOne(context.Background(),product)
+		if err != nil {
+			http.Error(w,err.Error(),http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+	}else{
+		http.Error(w,"Method Not Allowed",http.StatusForbidden)
+		return
+	}
+}

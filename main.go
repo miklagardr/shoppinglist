@@ -30,7 +30,6 @@ func main() {
 	uc := controllers.NewUserController(getClient())
 	olc := controllers.NewOrderListController(getClient())
 	o := controllers.NewOrderController(getClient())
-	pic := controllers.NewProductImgController(getClient())
 	admin := NewAdminController(getClient())
 
 	corsHandler := func(h http.Handler) http.Handler {
@@ -76,7 +75,7 @@ func main() {
 	r.GET("/admin/getAllUser/:username" , admin.getAllUserInformation)
 	r.DELETE("/admin/deleteUserByAdmin" , admin.deleteUserAdmin)  
 	r.GET("/admin/getOrders" , admin.GetOrdersAdmin) 
-    r.POST("/media/uploadProductImg", pic.UploadProductImg) 
+    r.POST("/admin/addNewProduct", admin.AddNewProduct) 
 
 
 	 port := os.Getenv("PORT")
