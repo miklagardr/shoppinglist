@@ -21,13 +21,13 @@ var store *sessions.CookieStore
 func init() {
 
 	store = sessions.NewCookieStore(generateSessionKey())
-
 	store.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   86400 * 7,
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	}
+	store.MaxAge(0) 
 }
 
 type UserController struct {
