@@ -24,8 +24,7 @@ func init() {
 
 	store.Options = &sessions.Options{
 		Path:     "/",
-		Domain:   "mf-shoppinglist.vercel.app",
-		MaxAge:   31536000,
+		MaxAge:   86400 * 7,
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	}
