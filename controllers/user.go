@@ -74,19 +74,8 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 
 	if req.Method == http.MethodPost {
 
-		session, err := store.Get(req, "user-session")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		if authenticated, ok := session.Values["authenticated"].(bool); ok && authenticated {
-			http.Error(w, "User is  logged in", http.StatusUnauthorized)
-			return
-		}
-
 		var user modals.User
-		err = json.NewDecoder(req.Body).Decode(&user)
+		err := json.NewDecoder(req.Body).Decode(&user)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -107,6 +96,26 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 			return
 		}
 
+		session, err := store.Get(req, "user-session")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if authenticated, ok := session.Values["authenticated"].(bool); ok && authenticated {
+			jsonResponse := modals.User{
+				Username:   existingUser.Username,
+				Email:      existingUser.Email,
+				Membership: existingUser.Membership,
+			}
+	
+			w.Header().Set("Content-Type", "application/json")
+			jsonUser, _ := json.Marshal(jsonResponse)
+			w.Write(jsonUser) // Kullanıcı bilgilerini bastır.
+			return
+		}
+
+
 		session.Values["user"] = modals.User{
 			Username:   existingUser.Username,
 			Email:      existingUser.Email,
@@ -125,7 +134,7 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 			Email:      existingUser.Email,
 			Membership: existingUser.Membership,
 		}
-		// Kullanıcı bilgilerini bastırdık. Ama password veya id bastırılmadı. Güvenlik sebeplerinden ötürü.
+		
 
 		w.Header().Set("Content-Type", "application/json")
 		jsonUser, _ := json.Marshal(jsonResponse)
