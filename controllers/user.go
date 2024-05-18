@@ -27,7 +27,6 @@ func init() {
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	}
-	store.MaxAge(0) 
 }
 
 type UserController struct {
@@ -98,7 +97,14 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 
 		session, err := store.Get(req, "user-session")
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			// Hata oluştuğunda mevcut oturumu temizle
+			session.Options.MaxAge = -1 // Oturumu hemen sonlandırır
+			err := session.Save(req, w)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			http.Error(w, "Failed to get session, existing session cleared", http.StatusInternalServerError)
 			return
 		}
 
