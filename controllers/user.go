@@ -23,10 +23,11 @@ func init() {
 	store = sessions.NewCookieStore(generateSessionKey())
 
 	store.Options = &sessions.Options{
-		Path:     "/",                   
-		MaxAge:   31536000,                 
-		SameSite: http.SameSiteNoneMode, 
-		Secure:   true,                    
+		Path:     "/",
+		Domain:   "mf-shoppinglist.vercel.app",
+		MaxAge:   31536000,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
 	}
 }
 
