@@ -36,7 +36,7 @@ func (o OrderController) CreateOrder(w http.ResponseWriter , req *http.Request ,
 		var order modals.Order 
 		order.OrderList = orderlist 
 		order.OrderId = generateOrderID()
-		order.Date = time.Now()
+		order.Date = getLocalTimeIstanbul()
 
 		collection := o.client.Database("shoppinglist").Collection("orders"); 
 		_ , err = collection.InsertOne(context.Background() , order)
@@ -106,4 +106,16 @@ func generateOrderID() string {
 		panic(err)
 	}
 	return id; 
+}
+
+func getLocalTimeIstanbul() (time.Time ){
+    location, _ := time.LoadLocation("Europe/Istanbul")
+    currentTime := time.Now().In(location).Format("02-01-2006 15:04:05")
+    parsedTime, err := time.Parse("02-01-2006 15:04:05", currentTime)
+    if err != nil {
+        panic(err)
+    }
+
+    return parsedTime
+
 }

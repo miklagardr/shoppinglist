@@ -97,8 +97,7 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 
 		session, err := store.Get(req, "user-session")
 		if err != nil {
-			// Hata oluştuğunda mevcut oturumu temizle
-			session.Options.MaxAge = -1 // Oturumu hemen sonlandırır
+			session.Options.MaxAge = -1 
 			err := session.Save(req, w)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
