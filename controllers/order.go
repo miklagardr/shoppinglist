@@ -109,13 +109,15 @@ func generateOrderID() string {
 }
 
 func getLocalTimeIstanbul() (time.Time ){
-    location, _ := time.LoadLocation("Europe/Istanbul")
-    currentTime := time.Now().In(location).Format("02-01-2006 15:04:05")
-    parsedTime, err := time.Parse("02-01-2006 15:04:05", currentTime)
-    if err != nil {
-        panic(err)
-    }
+    location, err := time.LoadLocation("Europe/Istanbul")
+	if err!=nil{
+		panic(err)
+	}
 
-    return parsedTime
+
+    currentTime := time.Now().In(location)
+   
+
+    return currentTime
 
 }

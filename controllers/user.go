@@ -129,7 +129,6 @@ func (uc UserController) LogInUser(w http.ResponseWriter, req *http.Request, _ h
 		err = session.Save(req, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
 		}
 
 		jsonResponse := modals.User{
