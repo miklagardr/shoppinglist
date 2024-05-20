@@ -35,7 +35,7 @@ func main() {
 	corsHandler := func(h http.Handler) http.Handler {
 
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Access-Control-Allow-Origin", getOrigin(r))
+			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -85,16 +85,16 @@ func main() {
 	http.ListenAndServe(":"+port, corsHandler(r))
 }
 
-func getOrigin(req *http.Request) string {
-	origin := req.Header.Get("Origin")
-	if origin == "https://mf-shoppinglist.vercel.app" {
-		return "https://mf-shoppinglist.vercel.app"
-	}
-	return "http://localhost:3000"
+// func getOrigin(req *http.Request) string {
+// 	origin := req.Header.Get("Origin")
+// 	if origin == "https://mf-shoppinglist.vercel.app" {
+// 		return "https://mf-shoppinglist.vercel.app"
+// 	}
+// 	return "http://localhost:3000"
 
-	// Bir tane origin kabul ediliyor. Veya hepsi. Ama hepsi güvenlik açısından riskli
-	// Bu yüzden bu fonksiyon ile sadece belirli origin kabul ediliyor.
-}
+// 	// Bir tane origin kabul ediliyor. Veya hepsi. Ama hepsi güvenlik açısından riskli
+// 	// Bu yüzden bu fonksiyon ile sadece belirli origin kabul ediliyor.
+// }
 
 func getClient() *mongo.Client {
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URI"))  // Bağlantı adresi
