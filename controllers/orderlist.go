@@ -47,7 +47,7 @@ func (olc OrderListController) CreateOrderList(w http.ResponseWriter, req *http.
 }
 func (olc OrderListController) AddProductOrderList(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	if req.Method == http.MethodPut {
-		var newOrderList modals.SingleOrderList // Bize gelen değer. İçinde hangi kullanıcının hangi ürünü eklediği ve ürünün fiyatı yazıyor.
+		var newOrderList modals.SingleOrderList
 		err := json.NewDecoder(req.Body).Decode(&newOrderList)
 
 		if err != nil {

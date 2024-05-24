@@ -22,8 +22,6 @@ func init() {
 	}
 }
 
-// Databaseden ürünleri getirme işlemi
-// Database sipariş listesini ekleme. Kullanıcı ismine göresss
 func main() {
 	r := httprouter.New()
 	pc := controllers.NewProductController(getClient())
@@ -49,7 +47,7 @@ func main() {
 		})
 	}
 
-	// Uniqe username'e göre kullanıcı oluşturma ve getirme işlemi
+	
 
 	r.POST("/user/login", uc.LogInUser)
 	r.POST("/user/createUser", uc.CreateUser)
@@ -59,13 +57,13 @@ func main() {
 	r.PUT("/user/editPassword", uc.UpdatePassword)
 	r.DELETE("/user/deleteUser", uc.DeleteUser)
 
-	r.GET("/products", pc.GetAllProduct)  // Bütün productsları getir
-	r.GET("/products/:id", pc.GetProduct) // Id'ye göre product getir
+	r.GET("/products", pc.GetAllProduct)  
+	r.GET("/products/:id", pc.GetProduct)
 
 	r.GET("/category/:category", pc.GetCategoryProduct)
 
-	r.POST("/orderlist/create", olc.CreateOrderList)        // Kullanıcı id'sine göre order list ekle
-	r.PUT("/orderlist/addproduct", olc.AddProductOrderList) // Id'ye göre order list sil
+	r.POST("/orderlist/create", olc.CreateOrderList)        
+	r.PUT("/orderlist/addproduct", olc.AddProductOrderList) 
 	r.DELETE("/orderlist/deleteproduct", olc.DeleteOrderList)
 	r.GET("/orderlist/fetch/:username", olc.GetOrderList)
 
@@ -91,18 +89,15 @@ func main() {
  		return "https://mf-shoppinglist.vercel.app"
  	}
  	return "http://localhost:3000"
-
- 	// Bir tane origin kabul ediliyor. Veya hepsi. Ama hepsi güvenlik açısından riskli
- 	// Bu yüzden bu fonksiyon ile sadece belirli origin kabul ediliyor.
  }
 
 func getClient() *mongo.Client {
-	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URI"))  // Bağlantı adresi
-	client, err := mongo.Connect(context.Background(), clientOptions) // Bağlantı kurma
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URI"))  
+	client, err := mongo.Connect(context.Background(), clientOptions) 
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = client.Ping(context.Background(), nil) // Bağlantıyı kontrol etme
+	err = client.Ping(context.Background(), nil)
 	if err != nil {
 		log.Fatal(err)
 	}

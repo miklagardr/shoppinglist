@@ -24,7 +24,7 @@ func (pc ProductController) GetAllProduct(w http.ResponseWriter, req *http.Reque
 
 	if req.Method == http.MethodGet {
 		collection := pc.client.Database("shoppinglist").Collection("products")
-		cursor, err := collection.Find(context.Background(), bson.D{}) // Bütün productları getir
+		cursor, err := collection.Find(context.Background(), bson.D{}) 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

@@ -1,2 +1,1 @@
-# shoppinglist
-# shoppinglist
+# Backend service for shopping list 

@@ -208,14 +208,14 @@ func (uc UserController) CreateUser(w http.ResponseWriter, req *http.Request, _ 
 			return
 		}
 
-		_, err = collection.InsertOne(context.Background(), user) // Result alıcaz. Ama almıyoruz çünkü user'ı direk bastırıyoruz.
+		_, err = collection.InsertOne(context.Background(), user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("User created successfully.Redirect to login page..")) // User bilgilerini geri döndermek riskli.
+		w.Write([]byte("User created successfully.Redirect to login page.."))
 
 	} else {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -317,10 +317,6 @@ func (uc UserController) UpdateEmail(w http.ResponseWriter, req *http.Request, _
 }
 
 func (uc UserController) UpdatePassword(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	// Email'de bilgileri session'dan aldık. Fakat password için session'dan alamayız. Çünkü password session'da tutulmaz.
-	// Bu yüzden body'den alıcaz.
-	// Aynı zamanda body içerisinden username'i de alıcaz. Çünkü password değiştirirken username'e ihtiyacımız var.
-	// Hemde eski password'u da alıcaz. Çünkü eski password'u kontrol etmemiz gerekiyor.
 
 	if req.Method == http.MethodPut {
 		var user modals.EditUser

@@ -73,7 +73,7 @@ func (o OrderController) GetOrdersByUsername(w http.ResponseWriter , req *http.R
 		username := p.ByName("username") 
 		filter := bson.M{"orderlist.username" : username} 
 		collection := o.client.Database("shoppinglist").Collection("orders")
-		cursor, err := collection.Find(context.Background(), filter) // Bütün productları getir
+		cursor, err := collection.Find(context.Background(), filter) 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
